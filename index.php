@@ -15,14 +15,17 @@ switch($path){
         require 'includes/auth/signup.php';
         break;
     // task
-    case 'task/add':
-        require 'includes/task/add.php';
+    case 'users/add':
+        require 'includes/users/add.php';
         break;  
-    case 'task/update':
-        require 'includes/task/update.php';
+    case 'users/edit':
+        require 'includes/users/edit.php';
         break;  
-    case 'task/delete':
-        require 'includes/task/delete.php';
+    case 'users/delete':
+        require 'includes/users/delete.php';
+        break;
+    case 'users/changepwd':
+        require 'includes/users/changepwd.php';
         break;
     //pages
     case 'dashboard':

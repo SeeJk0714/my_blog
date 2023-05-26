@@ -1,4 +1,12 @@
 <?php
+    
+      $database = connectToDB();
+  
+      $sql = 'SELECT * FROM users';
+      $query = $database->prepare($sql);
+      $query->execute();
+      $users = $query->fetchAll();
+
   require "parts/header.php";
 ?>
     <div class="container mx-auto my-5" style="max-width: 700px;">
@@ -11,6 +19,7 @@
         </div>
       </div>
       <div class="card mb-2 p-4">
+        <?php require "parts/message_success.php"; ?>
         <table class="table">
           <thead>
             <tr>
@@ -22,75 +31,56 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">3</th>
-              <td>Jack</td>
-              <td>jack@gmail.com</td>
-              <td><span class="badge bg-success">User</span></td>
+            <?php foreach($users as $user):?>
+            <tr class="<?php
+                if ( 
+                  isset( $_SESSION['new_user_email'] ) && 
+                  $_SESSION['new_user_email'] == $user['email'] ) {
+                    echo "table-success";
+                    unset( $_SESSION['new_user_email'] );
+                }
+              ?>">
+              <th scope="row"><?= $user['id']; ?></th>
+              <td><?= $user['name']; ?></td>
+              <td><?= $user['email']; ?></td>
+              <td><span class='<?php 
+                if($user["role"] == "user"){
+                  echo "badge bg-success";
+                } else if($user["role"] == "editor"){
+                  echo "badge bg-info";
+                } else if($user["role"] == "admin"){
+                  echo "badge bg-primary";
+                }
+                ?>'><?=$user['role']; ?></span></td>
               <td class="text-end">
                 <div class="buttons">
-                  <a
-                    href="/manage-users-edit"
-                    class="btn btn-success btn-sm me-2"
-                    ><i class="bi bi-pencil"></i
-                  ></a>
-                  <a
+                  <form method="POST" action="/users/edit">
+                    <input type="hidden" name="edit">
+                    <a
+                      href="/manage-users-edit"
+                      class="btn btn-success btn-sm me-2"
+                      ><i class="bi bi-pencil"></i>
+                    </a>
+                  </form>
+                  <form method="POST" action="/users/changepwd">
+                    <input type="hidden" name="changepwd">
+                    <a
                     href="/manage-users-changepwd"
                     class="btn btn-warning btn-sm me-2"
-                    ><i class="bi bi-key"></i
-                  ></a>
-                  <a href="#" class="btn btn-danger btn-sm"
-                    ><i class="bi bi-trash"></i
-                  ></a>
+                    ><i class="bi bi-key"></i>
+                    </a>
+                  </form>
+                  <form method="POST" action="/users/delete">
+                    <input type="hidden" name="delete">
+                    <a href="#" class="btn btn-danger btn-sm"
+                    ><i class="bi bi-trash"></i>
+                    </a>
+                  </form>
+                  
                 </div>
               </td>
             </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jane</td>
-              <td>jane@gmail.com</td>
-              <td><span class="badge bg-info">Editor</span></td>
-              <td class="text-end">
-                <div class="buttons">
-                  <a
-                    href="/manage-users-edit"
-                    class="btn btn-success btn-sm me-2"
-                    ><i class="bi bi-pencil"></i
-                  ></a>
-                  <a
-                    href="/manage-users-changepwd"
-                    class="btn btn-warning btn-sm me-2"
-                    ><i class="bi bi-key"></i
-                  ></a>
-                  <a href="#" class="btn btn-danger btn-sm"
-                    ><i class="bi bi-trash"></i
-                  ></a>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">1</th>
-              <td>John</td>
-              <td>john@gmail.com</td>
-              <td><span class="badge bg-primary">Admin</span></td>
-              <td class="text-end">
-                <div class="buttons">
-                  <a
-                    href="/manage-users-edit"
-                    class="btn btn-success btn-sm me-2"
-                    ><i class="bi bi-pencil"></i
-                  ></a>
-                  <a
-                    href="/manage-users-changepwd"
-                    class="btn btn-warning btn-sm me-2"
-                    ><i class="bi bi-key"></i
-                  ></a>
-                  <a href="#" class="btn btn-danger btn-sm"
-                    ><i class="bi bi-trash"></i
-                  ></a>
-                </div>
-              </td>
-            </tr>
+            <?php endforeach?>
           </tbody>
         </table>
       </div>
