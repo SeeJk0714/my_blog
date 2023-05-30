@@ -9,18 +9,17 @@
 
     if(isset($error)){
         $_SESSION['error'] = $error;
-        header("Location: /manage-users");
+        header("Location: /manage-posts");
         exit;
     }
 
-    $sql = "DELETE FROM users WHERE id = :id";
+    $sql = "DELETE FROM posts WHERE id = :id";
     $query = $database->prepare($sql);
     $query->execute([
         'id' => $id
     ]);
 
-    $_SESSION["success"] = "user has been deleted.";
+    $_SESSION["success"] = "post has been deleted.";
 
-    header("Location: /manage-users");
+    header("Location: /manage-posts");
     exit;
-

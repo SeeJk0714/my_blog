@@ -1,11 +1,18 @@
 <?php
-    
-      $database = connectToDB();
   
-      $sql = 'SELECT * FROM users';
-      $query = $database->prepare($sql);
-      $query->execute();
-      $users = $query->fetchAll();
+  // check if the current user is an admin or not
+  if(!isEditorOrAdmin()){
+  // if current user is not an admin, redirect to dashboard
+    header("Location: /dashboard");
+    exit;
+  }
+
+  $database = connectToDB();
+  
+  $sql = 'SELECT * FROM users';
+  $query = $database->prepare($sql);
+  $query->execute();
+  $users = $query->fetchAll();
 
   require "parts/header.php";
 ?>
@@ -54,33 +61,44 @@
                 ?>'><?=$user['role']; ?></span></td>
               <td class="text-end">
                 <div class="buttons">
-                  <form method="POST" action="/users/edit">
-                    <input type="hidden" name="edit">
-                    <a
-                      href="/manage-users-edit"
-                      class="btn btn-success btn-sm me-2"
-                      ><i class="bi bi-pencil"></i>
-                    </a>
-                  </form>
-                  <form method="POST" action="/users/changepwd">
-                    <input type="hidden" name="changepwd">
-                    <a
-                    href="/manage-users-changepwd"
-                    class="btn btn-warning btn-sm me-2"
-                    ><i class="bi bi-key"></i>
-                    </a>
-                  </form>
-                  <form method="POST" action="/users/delete">
-                    <input type="hidden" name="delete">
-                    <a href="#" class="btn btn-danger btn-sm"
-                    ><i class="bi bi-trash"></i>
-                    </a>
-                  </form>
-                  
+                  <a
+                    href="/manage-users-edit?id=<?= $user['id']; ?>"
+                    class="btn btn-success btn-sm me-2"
+                    ><i class="bi bi-pencil"></i>
+                  </a>
+                  <a
+                  href="/manage-users-changepwd?id=<?= $user['id']; ?>"
+                  class="btn btn-warning btn-sm me-2"
+                  ><i class="bi bi-key"></i>
+                  </a>
+                  <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#delete-modal-<?= $user['id']; ?>">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                  <!-- Modal -->
+                  <div class="modal fade" id="delete-modal-<?= $user['id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to delete this user: <?= $user['name']; ?>?</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-start">
+                          You're currently deleting "<?= $user['name']; ?>"
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <form method="POST" action="/users/delete">
+                            <input type="hidden" name="id" value= "<?= $user['id']; ?>"/>
+                            <button type="submit" class="btn btn-danger">Yes, please delete</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </td>
             </tr>
-            <?php endforeach?>
+            <?php endforeach; ?>
           </tbody>
         </table>
       </div>

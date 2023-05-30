@@ -14,7 +14,7 @@ switch($path){
     case 'auth/signup':
         require 'includes/auth/signup.php';
         break;
-    // task
+    // users
     case 'users/add':
         require 'includes/users/add.php';
         break;  
@@ -26,6 +26,16 @@ switch($path){
         break;
     case 'users/changepwd':
         require 'includes/users/changepwd.php';
+        break;
+    //posts
+    case 'posts/add':
+        require 'includes/posts/add.php';
+        break;
+    case 'posts/edit':
+        require 'includes/posts/edit.php';
+        break;
+    case 'posts/delete':
+        require 'includes/posts/delete.php';
         break;
     //pages
     case 'dashboard':
@@ -40,20 +50,23 @@ switch($path){
     case 'logout':
         require 'pages/logout.php';
         break;
+    //post
     case 'post':
         require 'pages/post.php';
         break;
     case 'manage-posts':
         require 'pages/manage-posts.php';
         break;
-    case 'manage-users':
-        require 'pages/manage-users.php';
-        break;
+    
     case 'manage-posts-add':
         require 'pages/manage-posts-add.php';
         break;
     case 'manage-posts-edit':
         require 'pages/manage-posts-edit.php';
+        break;
+    //user
+    case 'manage-users':
+        require 'pages/manage-users.php';
         break;
     case 'manage-users-add':
         require 'pages/manage-users-add.php';

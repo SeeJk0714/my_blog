@@ -21,23 +21,26 @@
             </div>
           </div>
         </div>
-        <div class="col">
-          <div class="card mb-2">
-            <div class="card-body">
-              <h5 class="card-title text-center">
-                <div class="mb-1">
-                  <i class="bi bi-people" style="font-size: 3rem;"></i>
+        <!-- only show this option if is admin -->
+        <?php if (isEditorOrAdmin()): ?>
+          <div class="col">
+            <div class="card mb-2">
+              <div class="card-body">
+                <h5 class="card-title text-center">
+                  <div class="mb-1">
+                    <i class="bi bi-people" style="font-size: 3rem;"></i>
+                  </div>
+                  Manage Users
+                </h5>
+                <div class="text-center mt-3">
+                  <a href="/manage-users" class="btn btn-primary btn-sm"
+                    >Access</a
+                  >
                 </div>
-                Manage Users
-              </h5>
-              <div class="text-center mt-3">
-                <a href="/manage-users" class="btn btn-primary btn-sm"
-                  >Access</a
-                >
               </div>
             </div>
           </div>
-        </div>
+        <?php endif; ?>
       </div>
       <div class="mt-4 text-center">
         <a href="/" class="btn btn-link btn-sm"
