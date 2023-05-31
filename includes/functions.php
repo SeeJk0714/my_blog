@@ -14,6 +14,12 @@ function connectToDB(){
     return $database;
 }
 
+// function to check if the user is currently logged in or not
+function isUserLoggedIn() {
+    return isset( $_SESSION['user'] ) ? true : false;
+}
+
+
 //function to check if the user is an admin
 function isAdmin(){
     if( isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin'){
@@ -31,6 +37,14 @@ function isEditor() {
     }
 }
 
+function isUser() {
+    if ( isset( $_SESSION['user']['role'] ) && $_SESSION['user']['role'] === 'user' ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function isEditorOrAdmin() {
     // shorthand
     return isAdmin() || isEditor() ? true : false;
@@ -40,4 +54,8 @@ function isEditorOrAdmin() {
     // } else {
     //     return false;
     // }
+}
+
+function isEditorOrUser() {
+    return isUser() || isEditor() ? true : false;
 }

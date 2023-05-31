@@ -1,4 +1,9 @@
 <?php
+// make sure the user is logged in
+if ( !isUserLoggedIn() ) {
+    header("Location: /");
+    exit;
+}
 
 $database = connectToDB();
 
@@ -8,7 +13,7 @@ $status = $_POST["status"];
 $id =$_POST["id"];
 
 if(empty($title) || empty($content) || empty($status) || empty($id)){
-    $error = "Please enter fields";
+    $error = "All fields is requrired";
 }
 
 if(isset($error)){
@@ -25,6 +30,8 @@ $query->execute([
     'status' => $status,
     'id' => $id
 ]);
+
+$_SESSION["success"] = "Post has been edited.";
 
 header("Location: /manage-posts");
 exit;

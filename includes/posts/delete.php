@@ -1,25 +1,31 @@
 <?php
-    $database = connectToDB();
+// make sure the user is logged in
+if ( !isUserLoggedIn() ) {
+    header("Location: /");
+    exit;
+}
 
-    $id = $_POST["id"];
+$database = connectToDB();
 
-    if(empty($id)){
-        $error = "ERROR!";
-    }
+$id = $_POST["id"];
 
-    if(isset($error)){
-        $_SESSION['error'] = $error;
-        header("Location: /manage-posts");
-        exit;
-    }
+if(empty($id)){
+    $error = "ERROR!";
+}
 
-    $sql = "DELETE FROM posts WHERE id = :id";
-    $query = $database->prepare($sql);
-    $query->execute([
-        'id' => $id
-    ]);
-
-    $_SESSION["success"] = "post has been deleted.";
-
+if(isset($error)){
+    $_SESSION['error'] = $error;
     header("Location: /manage-posts");
     exit;
+}
+
+$sql = "DELETE FROM posts WHERE id = :id";
+$query = $database->prepare($sql);
+$query->execute([
+    'id' => $id
+]);
+
+$_SESSION["success"] = "post has been deleted.";
+
+header("Location: /manage-posts");
+exit;

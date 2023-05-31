@@ -50,32 +50,32 @@ switch($path){
     case 'logout':
         require 'pages/logout.php';
         break;
-    //post
     case 'post':
         require 'pages/post.php';
         break;
+    //post
     case 'manage-posts':
-        require 'pages/manage-posts.php';
+        require 'pages/posts/manage-posts.php';
         break;
     
     case 'manage-posts-add':
-        require 'pages/manage-posts-add.php';
+        require 'pages/posts/manage-posts-add.php';
         break;
     case 'manage-posts-edit':
-        require 'pages/manage-posts-edit.php';
+        require 'pages/posts/manage-posts-edit.php';
         break;
     //user
     case 'manage-users':
-        require 'pages/manage-users.php';
+        require 'pages/users/manage-users.php';
         break;
     case 'manage-users-add':
-        require 'pages/manage-users-add.php';
+        require 'pages/users/manage-users-add.php';
         break;
     case 'manage-users-edit':
-        require 'pages/manage-users-edit.php';
+        require 'pages/users/manage-users-edit.php';
         break;
     case 'manage-users-changepwd':
-        require 'pages/manage-users-changepwd.php';
+        require 'pages/users/manage-users-changepwd.php';
         break;
     default:
         require 'pages/home.php';

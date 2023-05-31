@@ -1,20 +1,41 @@
 <?php
- 
+  // make sure the user is logged in
+  if ( !isUserLoggedIn() ) {
+    header("Location: /");
+    exit;
+  }
+  
   $database = connectToDB();
   
   if ( isEditorOrAdmin()){
-    $sql = "SELECT * FROM posts";
+    // $sql = "SELECT * FROM posts";
+    $sql = "SELECT 
+    posts.*, 
+    users.name AS user_name,
+    users.email AS user_email 
+    FROM posts 
+    JOIN users 
+    ON posts.user_id = users.id";
     $query = $database->prepare($sql);
     $query->execute();
-    $posts = $query->fetchAll();
   }else{
-    $sql = "SELECT * FROM posts where user_id = :user_id";
+    // $sql = "SELECT * FROM posts where user_id = :user_id";
+    $sql = "SELECT 
+        posts.id, 
+        posts.title, 
+        posts.status, 
+        users.name AS user_name 
+        FROM posts 
+        JOIN users 
+        ON posts.user_id = users.id 
+        where posts.user_id = :user_id";
     $query = $database->prepare($sql);
     $query->execute([
-        'user_id' => $_SESSION["user"]["id"]
-      ]);
-    $posts = $query->fetchAll();
+      'user_id' => $_SESSION["user"]["id"]
+    ]);
   }
+  //fetch the data from query
+  $posts = $query->fetchAll();
 
   require "parts/header.php";
 ?>
@@ -33,7 +54,8 @@
           <thead>
             <tr>
               <th scope="col">ID</th>
-              <th scope="col" style="width: 40%;">Title</th>
+              <th scope="col" style="width: 20%;">Title</th>
+              <th scope="col">Created By</th>
               <th scope="col">Status</th>
               <th scope="col" class="text-end">Actions</th>
             </tr>
@@ -42,7 +64,17 @@
             <?php foreach($posts as $post): ?>
             <tr>
               <th scope="row"><?= $post['id']; ?></th>
-              <td><?= $post['title']; ?></td>
+              <td>
+                <?php
+                  $excerpt = str_split($post['title'],10);
+                  if(strlen($excerpt[0])<10){
+                    echo $excerpt[0];
+                  }else{
+                    echo $excerpt[0]."...";
+                  }
+                ?> 
+              </td>
+              <td><?= $post['user_name']; ?><br/><?= $post['user_email']; ?></td>
               <td><span class="<?php 
                 if($post['status'] == "pending"){
                   echo "badge bg-warning";

@@ -1,11 +1,23 @@
 <?php
+  // make sure the user is logged in
+  if ( !isUserLoggedIn() ) {
+    header("Location: /");
+    exit;
+  }
 
   if ( isset( $_GET['id'] ) ) {
     // load database
     $database = connectToDB();
 
     // load the post data based on the id
-    $sql = "SELECT * FROM posts WHERE id = :id";
+    $sql = "SELECT
+    posts.*,
+    users.name
+    FROM posts 
+    JOIN users
+    ON posts.modified_by = users.id
+    WHERE posts.id = :id";
+    // $sql = "SELECT * FROM posts WHERE id = :id";
     $query = $database->prepare( $sql );
     $query->execute([
       'id' => $_GET['id']
@@ -26,6 +38,7 @@
         <h1 class="h1">Edit Post</h1>
       </div>
       <div class="card mb-2 p-4">
+        <?php require "parts/message_error.php";?>
         <form method="POST" action="posts/edit">
           <div class="mb-3">
             <label for="post-title" class="form-label">Title</label>
@@ -47,6 +60,21 @@
               <option value="pending" <?= $post['status'] === 'pending' ? 'selected' : ''; ?>>Pending for Review</option>
               <option value="publish" <?= $post['status'] === 'publish' ? 'selected' : ''; ?>>Publish</option>
             </select>
+          </div>
+          <div class="mb-3">
+            Last modified by: 
+              <?php 
+                // $sql = "SELECT * FROM users where id = :id";
+                // $query = $database->prepare( $sql );
+                // $query->execute([
+                //   'id' => $post["modified_by"]
+                // ]);
+                // $user = $query->fetch();
+                // echo $user["name"];
+
+                echo $post["name"];
+              ?> 
+              on ( <?= $post["modified_at"]; ?> )
           </div>
           <div class="text-end">
             <input type="hidden" name="id" value="<?= $post['id']; ?>"/>

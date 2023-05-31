@@ -2,7 +2,7 @@
 
   $database = connectToDB();
 
-  $sql = 'SELECT * FROM posts';
+  $sql = "SELECT * FROM posts where status = 'publish' ORDER BY id DESC";
   $query = $database->prepare($sql);
   $query->execute();
   $posts = $query->fetchAll();
@@ -15,7 +15,12 @@
       <div class="card mb-2">
         <div class="card-body">
           <h5 class="card-title"><?= $post['title']; ?></h5>
-          <p class="card-text"><?= $post['content']; ?></p>
+          <p class="card-text">
+            <?php
+              $excerpt = str_split($post['content'],100);
+              echo $excerpt[0]."... read more";
+            ?>
+          </p>
           <div class="text-end">
             <a href="/post?id=<?= $post['id']; ?>" class="btn btn-primary btn-sm">Read More</a>
           </div>
@@ -23,7 +28,7 @@
       </div>
       <?php endforeach ;?>
       <div class="mt-4 d-flex justify-content-center gap-3">
-      <?php if ( isset( $_SESSION["user"] ) ) { ?>
+      <?php if ( isUserLoggedIn() ) { ?>
         <a href="/logout" class="btn btn-link btn-sm">Logout</a>
         <a href="/dashboard" class="btn btn-link btn-sm">dashboard</a>
       <?php } else { ?>
