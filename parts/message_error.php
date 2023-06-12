@@ -1,5 +1,5 @@
 <?php 
-if(isset( $_SESSION['error'])):?>
+if(isset( $_SESSION['error'])  && !empty( $_SESSION['error'] ) ):?>
     <div class="alert alert-danger" role="alert">
         <?php
         echo $_SESSION['error']; 

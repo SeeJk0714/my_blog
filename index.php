@@ -1,42 +1,48 @@
 <?php
 session_start();
-
-require "includes/functions.php";
+// require "includes/functions.php";
+require "includes/class-db.php";
+require "includes/class-auth.php";
+require "includes/class-user.php";
+require "includes/class-post.php";
+require "includes/class-comment.php";
 
 $path = parse_url($_SERVER["REQUEST_URI"],PHP_URL_PATH);
 $path = trim($path,'/');
-
 switch($path){
     // auth
     case 'auth/login':
-        require 'includes/auth/login.php';
+        Auth::login();
         break;
     case 'auth/signup':
-        require 'includes/auth/signup.php';
+        Auth::signup();
         break;
     // users
     case 'users/add':
-        require 'includes/users/add.php';
-        break;  
+        User::add();
+        break;
     case 'users/edit':
-        require 'includes/users/edit.php';
-        break;  
+        User::edit();
+        break;
     case 'users/delete':
-        require 'includes/users/delete.php';
+        User::delete();
         break;
     case 'users/changepwd':
-        require 'includes/users/changepwd.php';
+        User::changepwd();
         break;
     //posts
     case 'posts/add':
-        require 'includes/posts/add.php';
+        Post::add();
         break;
     case 'posts/edit':
-        require 'includes/posts/edit.php';
+        Post::edit();
         break;
     case 'posts/delete':
-        require 'includes/posts/delete.php';
+        Post::delete();
         break;
+    //comments
+    case 'comments/add':
+        Comment::add();
     //pages
     case 'dashboard':
         require 'pages/dashboard.php';
@@ -48,7 +54,7 @@ switch($path){
         require 'pages/signup.php';
         break;
     case 'logout':
-        require 'pages/logout.php';
+        Auth::logout();
         break;
     case 'post':
         require 'pages/post.php';
@@ -57,7 +63,6 @@ switch($path){
     case 'manage-posts':
         require 'pages/posts/manage-posts.php';
         break;
-    
     case 'manage-posts-add':
         require 'pages/posts/manage-posts-add.php';
         break;

@@ -1,30 +1,13 @@
 <?php
    // check if the current user is an admin or not
-  if(!isEditorOrAdmin()){
+  if(!Auth::isAdmin()){
     // if current user is not an admin, redirect to dashboard
       header("Location: /dashboard");
       exit;
     }
 
-  if ( isset( $_GET['id'] ) ) {
-    $database = connectToDB();
+  $user = User::getUserByID();
   
-    $sql = "SELECT * FROM users WHERE id = :id";
-    $query = $database->prepare( $sql );
-    $query->execute([
-      'id' => $_GET['id']
-    ]);
-  
-    $user = $query->fetch();
-  
-    if(! $user){
-      header("Location: /manage-users");
-    }
-  }else{
-    header("Location: /manage-users");
-    exit;
-  }
-
   require "parts/header.php";
 ?>
     <div class="container mx-auto my-5" style="max-width: 700px;">

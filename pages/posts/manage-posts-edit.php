@@ -1,35 +1,11 @@
 <?php
   // make sure the user is logged in
-  if ( !isUserLoggedIn() ) {
+  if ( !Auth::isUserLoggedIn() ) {
     header("Location: /");
     exit;
   }
 
-  if ( isset( $_GET['id'] ) ) {
-    // load database
-    $database = connectToDB();
-
-    // load the post data based on the id
-    $sql = "SELECT
-    posts.*,
-    users.name
-    FROM posts 
-    JOIN users
-    ON posts.modified_by = users.id
-    WHERE posts.id = :id";
-    // $sql = "SELECT * FROM posts WHERE id = :id";
-    $query = $database->prepare( $sql );
-    $query->execute([
-      'id' => $_GET['id']
-    ]);
-
-    // fetch
-    $post = $query->fetch();
-
-  }else{
-    header("Location: /manage-posts");
-    exit;
-  }
+  $post = Post::getPostEditByID();
 
   require "parts/header.php";
 ?>
@@ -91,4 +67,3 @@
 
 <?php
   require "parts/footer.php";
-?>

@@ -1,41 +1,11 @@
 <?php
   // make sure the user is logged in
-  if ( !isUserLoggedIn() ) {
+  if ( !Auth::isUserLoggedIn() ) {
     header("Location: /");
     exit;
   }
   
-  $database = connectToDB();
-  
-  if ( isEditorOrAdmin()){
-    // $sql = "SELECT * FROM posts";
-    $sql = "SELECT 
-    posts.*, 
-    users.name AS user_name,
-    users.email AS user_email 
-    FROM posts 
-    JOIN users 
-    ON posts.user_id = users.id";
-    $query = $database->prepare($sql);
-    $query->execute();
-  }else{
-    // $sql = "SELECT * FROM posts where user_id = :user_id";
-    $sql = "SELECT 
-        posts.id, 
-        posts.title, 
-        posts.status, 
-        users.name AS user_name 
-        FROM posts 
-        JOIN users 
-        ON posts.user_id = users.id 
-        where posts.user_id = :user_id";
-    $query = $database->prepare($sql);
-    $query->execute([
-      'user_id' => $_SESSION["user"]["id"]
-    ]);
-  }
-  //fetch the data from query
-  $posts = $query->fetchAll();
+$posts = Post::getPostsByUserRole();
 
   require "parts/header.php";
 ?>
@@ -141,4 +111,3 @@
 
 <?php
   require "parts/footer.php";
-

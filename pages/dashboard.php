@@ -22,7 +22,7 @@
           </div>
         </div>
         <!-- only show this option if is admin -->
-        <?php if (isEditorOrAdmin()): ?>
+        <?php if (Auth::isAdmin() || Auth::isEditor()): ?>
           <div class="col">
             <div class="card mb-2">
               <div class="card-body">

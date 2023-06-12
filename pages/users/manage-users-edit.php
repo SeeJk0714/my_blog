@@ -1,34 +1,13 @@
 <?php
    // check if the current user is an admin or not
-  if(!isEditorOrAdmin()){
+  if(!Auth::isAdmin()){
     // if current user is not an admin, redirect to dashboard
       header("Location: /dashboard");
       exit;
     }
 
-   // make sure the id parameter is available in the url
-   if ( isset( $_GET['id'] ) ) {
-    // load database
-    $database = connectToDB();
-
-    // load the user data based on the id
-    $sql = "SELECT * FROM users WHERE id = :id";
-    $query = $database->prepare( $sql );
-    $query->execute([
-      'id' => $_GET['id']
-    ]);
-
-    // fetch
-    $user = $query->fetch();
-
-    //make sure user data us found database
-    if(! $user){
-      header("Location: /manage-users");
-    }
-  }else{
-    header("Location: /manage-users");
-    exit;
-  }
+  $user = User::getUserByID();
+   
   require "parts/header.php";
 ?>
     <div class="container mx-auto my-5" style="max-width: 700px;">
@@ -75,4 +54,3 @@
 
 <?php
   require "parts/footer.php";
-

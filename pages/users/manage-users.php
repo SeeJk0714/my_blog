@@ -1,18 +1,12 @@
 <?php
   
   // check if the current user is an admin or not
-  if(!isEditorOrAdmin()){
+  if(!Auth::isAdmin() && !Auth::isEditor()){
   // if current user is not an admin, redirect to dashboard
     header("Location: /dashboard");
     exit;
   }
-
-  $database = connectToDB();
-  
-  $sql = 'SELECT * FROM users';
-  $query = $database->prepare($sql);
-  $query->execute();
-  $users = $query->fetchAll();
+  $users = User::getUsers();
 
   require "parts/header.php";
 ?>
@@ -111,4 +105,3 @@
 
 <?php
   require "parts/footer.php";
-

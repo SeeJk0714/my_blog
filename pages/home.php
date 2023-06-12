@@ -1,11 +1,5 @@
 <?php
-
-  $database = connectToDB();
-
-  $sql = "SELECT * FROM posts where status = 'publish' ORDER BY id DESC";
-  $query = $database->prepare($sql);
-  $query->execute();
-  $posts = $query->fetchAll();
+  $posts = Post::getPublishPosts();
 
   require "parts/header.php";
 ?>
@@ -28,7 +22,7 @@
       </div>
       <?php endforeach ;?>
       <div class="mt-4 d-flex justify-content-center gap-3">
-      <?php if ( isUserLoggedIn() ) { ?>
+      <?php if ( Auth::isUserLoggedIn() ) { ?>
         <a href="/logout" class="btn btn-link btn-sm">Logout</a>
         <a href="/dashboard" class="btn btn-link btn-sm">dashboard</a>
       <?php } else { ?>
