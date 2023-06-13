@@ -3,7 +3,7 @@
 class Comment 
 {
 
-    public static function getCommentsByPostID()
+    public static function getCommentsByPostID($post_id)
     {
         $db = new DB();
         $sql = "SELECT
@@ -17,7 +17,7 @@ class Comment
             $comments = $db->fetchAll(
             $sql,
             [
-                "post_id" => $post["id"]
+                "post_id" => $post_id
             ]
         );
         return $comments;
@@ -55,7 +55,7 @@ class Comment
         $db->insert(
             $sql,
             [
-                'comment' => $comments,
+                'comments' => $comments,
                 'post_id' => $post_id,
                 'user_id' => $user_id
             ]);
